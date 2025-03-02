@@ -193,4 +193,48 @@ class Order {
     }
 }
 
+class Fine {
+    private int id;             // id штрафа
+    private int readerId;       // id читателя
+    private int amount;         // размер штрафа
+    private boolean isPaid;     // оплачен ли штраф
+    private String reason;      // причина штрафа
+
+    public Fine() {
+        isPaid = false;
+    }
+
+    // ввод штрафа
+    public void input(int readerId) {
+        this.readerId = readerId;
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("[  Штраф  ]\nВведите объем штрафа: ");
+        amount = scanner.nextInt();
+
+        System.out.print("Введите id штрафа: ");
+        id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Причина штрафа: ");
+        reason = scanner.nextLine();
+    }
+
+    // вывод штрафа
+    public void output() {
+        System.out.println("Штраф:");
+        System.out.println("  ID штрафа - " + id);
+        System.out.println("  ID читателя - " + readerId);
+        System.out.println("  Объем штрафа - " + amount + " $");
+        System.out.println("  Статус - " + (isPaid ? "Оплачен" : "Не оплачен"));
+        System.out.println("  Причина - " + reason);
+        System.out.println();
+    }
+
+    // присвоение статуса "оплачен"
+    public void edit() {
+        isPaid = true;
+    }
+}
+
 
