@@ -104,3 +104,93 @@ class Book {
     }
 }
 
+class Reader {
+    private int id;                 // id читателя
+    private int borrowedBookId;     // id занятой книги
+    private String name;            // имя
+    private String email;           // эл. почта
+
+    public Reader() {
+        borrowedBookId = 0;
+    }
+
+    // ввод читателя
+    public void input() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("[  Читатель  ]");
+        System.out.print("Введите имя: ");
+        name = scanner.nextLine();
+
+        System.out.print("Введите email: ");
+        email = scanner.nextLine();
+
+        System.out.print("Введите id читателя: ");
+        id = scanner.nextInt();
+        scanner.nextLine();
+    }
+
+    // вывод читателя
+    public void output() {
+        System.out.println("Читатель:");
+        System.out.println("  Имя - " + name);
+        System.out.println("  Почта - " + email);
+        System.out.println("  ID читателя - " + id);
+        System.out.print("  ID занятой книги - ");
+        if (borrowedBookId == 0) {
+            System.out.println("Книг не занято");
+        } else {
+            System.out.println(borrowedBookId);
+        }
+        System.out.println();
+    }
+
+    // выдача id читателя
+    public int getId() {
+        return id;
+    }
+}
+
+class Order {
+    private int id;             // id запроса
+    private int readerId;       // id читателя
+    private int bookId;         // id запрашиваемой книги
+    private String orderDate;   // дата запроса
+    private String returnDate;  // дата возврата
+
+    public Order() {
+        returnDate = "unreturned";
+    }
+
+    // ввод запроса
+    public void input(int readerId, int bookId) {
+        this.readerId = readerId;
+        this.bookId = bookId;
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("[  Запрос  ]");
+        System.out.print("Введите id запроса: ");
+        id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Дата запроса дд.мм.гггг: ");
+        orderDate = scanner.nextLine();
+    }
+
+    // вывод запроса
+    public void output() {
+        System.out.println("Запрос:");
+        System.out.println("  ID запроса - " + id);
+        System.out.println("  ID книги - " + bookId);
+        System.out.println("  ID читателя - " + readerId);
+        System.out.println("  Дата запроса - " + orderDate);
+        System.out.println("  Дата возврата - " + returnDate);
+        System.out.println();
+    }
+
+    // добавление даты возврата
+    public void edit(String returnDate) {
+        this.returnDate = returnDate;
+    }
+}
+
+
