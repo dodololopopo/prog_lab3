@@ -238,3 +238,51 @@ class Fine {
 }
 
 
+public class Main{
+    public static void main(String[] args) {
+        int howManyBooks;
+        Scanner scanner = new Scanner(System.in);
+
+        Author lary = new Author();
+        lary.input();
+        lary.output();
+
+        System.out.print("Сколько добавить книг?: ");
+        howManyBooks = scanner.nextInt();
+        scanner.nextLine();
+
+        Book[] gary = new Book[howManyBooks];
+        for (int i = 0; i < howManyBooks; ++i) {
+            System.out.print("N" + (i + 1) + ": ");
+            gary[i] = new Book();
+            gary[i].input(lary.getId());
+            lary.addBook(gary[i].getId()); // Добавление книги к автору
+        }
+
+        // Вывод данных всех книг
+        for (Book book : gary) {
+            book.output();
+        }
+        lary.output();
+
+        Reader mary = new Reader();
+        mary.input();
+        mary.output();
+
+        Order pery = new Order();
+        pery.input(mary.getId(), gary[0].getId()); // Используем первую книгу для примера
+        pery.output();
+
+        // Пример редактирования заказа
+        pery.edit("21.11.2121");
+        pery.output();
+
+        Fine jery = new Fine();
+        jery.input(mary.getId());
+        jery.output();
+
+        // Пример редактирования штрафа
+        jery.edit();
+        jery.output();
+    }
+}
