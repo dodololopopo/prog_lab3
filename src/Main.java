@@ -7,6 +7,8 @@ class Author {
     private String name;                // имя автора
     private String birthdate;           // дата рождения
 
+    public static int amount_of_authors = 0;
+
     public Author() {
         bookIds = new ArrayList<>();
     }
@@ -52,7 +54,36 @@ class Author {
     public int getId() {
         return id;
     }
+
+    //при добавлении автора их общее число растет
+    void increment() {
+        amount_of_authors++;
+    }
+
+    //при удалении автора их общее число уменьшается
+    void decrement() {
+        amount_of_authors--;
+    }
+
+    //отображение общего числа авторов
+    static void show_amount_of_authors() {
+        System.out.println("  \n\nВсего авторов: " + amount_of_authors + "\n\n");
+    }
+
+    //метод для вспомогательного класса
+    public int getBookCount() {
+        return bookIds.size(); // Возвращаем количество книг
+    }
 }
+
+//вспомогательный класс
+class ClassHelper {
+    // Метод для получения количества книг у автора
+    public static int getBooksCount(Author author) {
+        return author.getBookCount();
+    }
+}
+
 
 class Book {
     private int id;                 // id книги
@@ -238,6 +269,7 @@ class Fine {
 }
 
 
+
 public class Main{
     public static void main(String[] args) {
         int howManyBooks;
@@ -250,6 +282,7 @@ public class Main{
         System.out.print("Сколько добавить книг?: ");
         howManyBooks = scanner.nextInt();
         scanner.nextLine();
+
 
         Book[] gary = new Book[howManyBooks];
         for (int i = 0; i < howManyBooks; ++i) {
@@ -264,6 +297,7 @@ public class Main{
             book.output();
         }
         lary.output();
+
 
         Reader mary = new Reader();
         mary.input();
