@@ -270,6 +270,7 @@ class Fine {
 
 
 
+
 public class Main{
     public static void main(String[] args) {
         int howManyBooks;
@@ -278,12 +279,14 @@ public class Main{
         Author lary = new Author();
         lary.input();
         lary.output();
+        lary.increment();
+        Author.show_amount_of_authors();
 
         System.out.print("Сколько добавить книг?: ");
         howManyBooks = scanner.nextInt();
         scanner.nextLine();
 
-
+        //работа с массивом объектов
         Book[] gary = new Book[howManyBooks];
         for (int i = 0; i < howManyBooks; ++i) {
             System.out.print("N" + (i + 1) + ": ");
@@ -298,6 +301,15 @@ public class Main{
         }
         lary.output();
 
+        // Показать количество книг у автора с использованием вспомогательного класса
+        System.out.println("Количество книг у автора " + lary.getId() + ": " + ClassHelper.getBooksCount(lary));
+
+
+        Author lary2 = new Author();
+        lary2.input();
+        lary2.output();
+        lary2.increment();
+        Author.show_amount_of_authors();
 
         Reader mary = new Reader();
         mary.input();
