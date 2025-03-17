@@ -326,7 +326,13 @@ public class Main{
         int howManyBooks;
         Scanner scanner = new Scanner(System.in);
         Author lary = new Author();
-        lary.input();
+        try{
+            lary.input();
+        }
+        catch (Exception e){
+            System.out.println("We tried, we're sorry");
+            System.exit(1);
+        }
         lary.output();
         lary.increment();
         Author.show_amount_of_authors();
@@ -340,7 +346,13 @@ public class Main{
         for (int i = 0; i < howManyBooks; ++i) {
             System.out.print("N" + (i + 1) + ": ");
             gary[i] = new Book();
-            gary[i].input(lary.getId());
+            try{
+                gary[i].input(lary.getId());
+            }
+            catch (Exception e){
+                System.out.println("We tried, we're sorry");
+                System.exit(1);
+            }
             lary.addBook(gary[i].getId()); // Добавление книги к автору
         }
 
@@ -355,29 +367,63 @@ public class Main{
 
 
         Author lary2 = new Author();
-        lary2.input();
+        try{
+            lary2.input();
+        }
+        catch (Exception e){
+            System.out.println("We tried, we're sorry");
+            System.exit(1);
+        }
         lary2.output();
         lary2.increment();
         Author.show_amount_of_authors();
 
-        Reader mary = new Reader();
-        mary.input();
-        mary.output();
+        Reader[] reader = new Reader[2];
+        Fine[][] fine = new Fine[2][2];
+        for (int i=0; i<2; i++){
+            try {
+                reader[i].input();
+            }
+            catch (Exception e){
+                System.out.println("We tried, we're sorry");
+                System.exit(1);
+            }
+            for (int j=0; j<2; j++){
+                try{
+                    fine[i][j].input(reader[i].getId());
+                }
+                catch (Exception e){
+                    System.out.println("We tried, we're sorry");
+                    System.exit(1);
+                }
+            }
+        }
+
+        for (int i=0; i<2; i++){
+            reader[i].output();
+            for (int j=0; j<2; j++){
+                fine[i][j].output();
+            }
+        }
 
         Order pery = new Order();
-        pery.input(mary.getId(), gary[0].getId()); // Используем первую книгу для примера
+        try{
+            pery.input(reader[0].getId(), gary[0].getId()); // Используем первую книгу для примера
+        }
+        catch (Exception e){
+            System.out.println("We tried, we're sorry");
+            System.exit(1);
+        }
         pery.output();
 
         // Пример редактирования заказа
         pery.edit("21.11.2121");
         pery.output();
 
-        Fine jery = new Fine();
-        jery.input(mary.getId());
-        jery.output();
+
 
         // Пример редактирования штрафа
-        jery.edit();
-        jery.output();
+        fine[0][0].edit();
+        fine[0][0].output();
     }
 }
