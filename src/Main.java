@@ -16,16 +16,26 @@ class Author {
     // ввод автора
     public void input() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("[  Автор  ]");
-        System.out.print("Введите имя: ");
-        name = scanner.nextLine();
+        try {
+            System.out.println("[  Автор  ]");
+            System.out.print("Введите имя: ");
+            name = scanner.nextLine();
 
-        System.out.print("Введите дату рождения дд.мм.гггг: ");
-        birthdate = scanner.nextLine();
+            System.out.print("Введите дату рождения дд.мм.гггг: ");
+            birthdate = scanner.nextLine();
 
-        System.out.print("Введите id автора: ");
-        id = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Введите id автора: ");
+            id = Integer.parseInt(scanner.nextLine());
+
+            if (id < 0) {
+                throw new IllegalArgumentException("ID не может быть отрицательным.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: ID должен быть числом.");
+            throw e; // выбрасываем исключение дальше
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // вывод автора
@@ -101,16 +111,26 @@ class Book {
         Scanner scanner = new Scanner(System.in);
         this.authorId = authorId;
 
-        System.out.println("[  Книга  ]");
-        System.out.print("Введите название: ");
-        title = scanner.nextLine();
+        try {
+            System.out.println("[  Книга  ]");
+            System.out.print("Введите название: ");
+            title = scanner.nextLine();
 
-        System.out.print("Введите год публикации: ");
-        publishedYear = scanner.nextLine();
+            System.out.print("Введите год публикации: ");
+            publishedYear = scanner.nextLine();
 
-        System.out.print("Введите id книги: ");
-        id = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Введите id книги: ");
+            id = Integer.parseInt(scanner.nextLine());
+
+            if (id < 0) {
+                throw new IllegalArgumentException("ID не может быть отрицательным.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: ID должен быть числом.");
+            throw e; // выбрасываем исключение дальше
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // вывод книги
@@ -148,16 +168,26 @@ class Reader {
     // ввод читателя
     public void input() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("[  Читатель  ]");
-        System.out.print("Введите имя: ");
-        name = scanner.nextLine();
+        try {
+            System.out.println("[  Читатель  ]");
+            System.out.print("Введите имя: ");
+            name = scanner.nextLine();
 
-        System.out.print("Введите email: ");
-        email = scanner.nextLine();
+            System.out.print("Введите email: ");
+            email = scanner.nextLine();
 
-        System.out.print("Введите id читателя: ");
-        id = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Введите id читателя: ");
+            id = Integer.parseInt(scanner.nextLine());
+
+            if (id < 0) {
+                throw new IllegalArgumentException("ID не может быть отрицательным.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: ID должен быть числом.");
+            throw e; // выбрасываем исключение дальше
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // вывод читателя
@@ -198,13 +228,23 @@ class Order {
         this.bookId = bookId;
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("[  Запрос  ]");
-        System.out.print("Введите id запроса: ");
-        id = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            System.out.println("[  Запрос  ]");
+            System.out.print("Введите id запроса: ");
+            id = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Дата запроса дд.мм.гггг: ");
-        orderDate = scanner.nextLine();
+            if (id < 0) {
+                throw new IllegalArgumentException("ID не может быть отрицательным.");
+            }
+
+            System.out.print("Дата запроса дд.мм.гггг: ");
+            orderDate = scanner.nextLine();
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: ID должен быть числом.");
+            throw e; // выбрасываем исключение дальше
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // вывод запроса
@@ -240,15 +280,25 @@ class Fine {
         this.readerId = readerId;
 
         Scanner scanner = new Scanner(System.in);
-        System.out.print("[  Штраф  ]\nВведите объем штрафа: ");
-        amount = scanner.nextInt();
+        try {
+            System.out.print("[  Штраф  ]\nВведите объем штрафа: ");
+            amount = scanner.nextInt();
 
-        System.out.print("Введите id штрафа: ");
-        id = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Введите id штрафа: ");
+            id = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Причина штрафа: ");
-        reason = scanner.nextLine();
+            if (id < 0) {
+                throw new IllegalArgumentException("ID не может быть отрицательным.");
+            }
+
+            System.out.print("Причина штрафа: ");
+            reason = scanner.nextLine();
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: ID должен быть числом.");
+            throw e; // выбрасываем исключение дальше
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // вывод штрафа
@@ -275,7 +325,6 @@ public class Main{
     public static void main(String[] args) {
         int howManyBooks;
         Scanner scanner = new Scanner(System.in);
-
         Author lary = new Author();
         lary.input();
         lary.output();
