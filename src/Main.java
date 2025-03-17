@@ -283,6 +283,7 @@ class Fine {
         try {
             System.out.print("[  Штраф  ]\nВведите объем штрафа: ");
             amount = scanner.nextInt();
+            scanner.nextLine(); //чистка буфера
 
             System.out.print("Введите id штрафа: ");
             id = Integer.parseInt(scanner.nextLine());
@@ -381,6 +382,7 @@ public class Main{
         Reader[] reader = new Reader[2];
         Fine[][] fine = new Fine[2][2];
         for (int i=0; i<2; i++){
+            reader[i] = new Reader();
             try {
                 reader[i].input();
             }
@@ -389,6 +391,7 @@ public class Main{
                 System.exit(1);
             }
             for (int j=0; j<2; j++){
+                fine[i][j] = new Fine();
                 try{
                     fine[i][j].input(reader[i].getId());
                 }
