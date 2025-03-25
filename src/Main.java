@@ -1,7 +1,59 @@
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-class Author {
+class Collection<T extends Cloneable> implements Cloneable{
+    public List<T> items; // Список для хранения элементов коллекции
+
+    // Конструктор
+    public Collection() {
+        items = new ArrayList<>();
+    }
+
+    // Добавление элемента в коллекцию
+    public void add(T item) {
+        items.add(item);
+    }
+
+    // Вывод всех элементов коллекции
+    public void output() {
+        for (T item : items) {
+            System.out.println(item.toString());
+        }
+    }
+
+    @Override
+    public Collection<T> clone() throws CloneNotSupportedException {
+        // Создаем новый экземпляр Collection
+        Collection<T> coll = new Collection<>();
+        coll.items = new ArrayList<>();
+
+        for (T item : this.items) {
+            // Явное приведение типа с использованием интерфейса Cloneable
+            T clonedItem = cloneItem(item);
+            coll.items.add(clonedItem);
+        }
+
+        return coll;
+    }
+
+    @SuppressWarnings("unchecked")
+    private T cloneItem(T item) {
+        try {
+            return (T) item.getClass().getMethod("clone").invoke(item);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException("Clone not supported for item: " + item, e);
+        }
+    }
+}
+
+// Интерфейс для объектов, которые имеют уникальный идентификатор
+interface Identifiable {
+    int getId();
+}
+
+class Author implements Cloneable, Identifiable{
     private int id;                     // id автора
     private ArrayList<Integer> bookIds; // id книг
     private String name;                // имя автора
@@ -61,6 +113,7 @@ class Author {
     }
 
     // выдача id автора
+    @Override
     public int getId() {
         return id;
     }
@@ -84,6 +137,30 @@ class Author {
     public int getBookCount() {
         return bookIds.size(); // Возвращаем количество книг
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Автор:\n");
+        sb.append("  Имя - ").append(name).append("\n");
+        sb.append("  Дата рождения - ").append(birthdate).append("\n");
+        sb.append("  ID автора - ").append(id).append("\n");
+
+        if (!bookIds.isEmpty()) {
+            sb.append("  ID книг:\n");
+            for (int bookId : bookIds) {
+                sb.append("    - ").append(bookId).append("\n");
+            }
+        } else {
+            sb.append("  Нет книг от данного автора\n");
+        }
+
+        return sb.toString();
+    }
+    @Override
+    public Author clone() throws CloneNotSupportedException{
+        return (Author) super.clone();
+    }
 }
 
 //вспомогательный класс
@@ -94,13 +171,15 @@ class ClassHelper {
     }
 }
 
-
-class Book {
-    private int id;                 // id книги
-    private boolean isAvailable;    // статус доступности книги
-    private int authorId;           // id автора
-    private String title;           // название книги
-    private String publishedYear;   // год публикации
+abstract class Literature{
+    abstract public void update_lib();
+}
+class Book extends Literature implements Cloneable, Identifiable{
+    protected int id;                 // id книги
+    protected boolean isAvailable;    // статус доступности книги
+    protected int authorId;           // id автора
+    protected String title;           // название книги
+    protected String publishedYear;   // год публикации
 
     public Book() {
         isAvailable = true;
@@ -150,12 +229,91 @@ class Book {
     }
 
     // выдача id книги
+    @Override
     public int getId() {
         return id;
     }
+
+    public void update_lib(){
+        System.out.println("== Библиотека обновлена ==");
+        System.out.println("Причина: добавлена книга");
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Книга:\n");
+        sb.append("  Название - ").append(title).append("\n");
+        sb.append("  Год публикации - ").append(publishedYear).append("\n");
+        sb.append("  ID книги - ").append(id).append("\n");
+        sb.append("  ID автора - ").append(authorId).append("\n");
+        sb.append("  Статус - ").append(isAvailable ? "Доступна" : "Не доступна");
+        return sb.toString();
+    }
+
+    @Override
+    public Book clone() throws CloneNotSupportedException{
+        return (Book) super.clone();
+    }
 }
 
-class Reader {
+class EBook extends Book implements Cloneable{
+    private String file_format; // формат файла (например, PDF, EPUB)
+    private double file_size;        // размер файла в мегабайтах
+
+    public EBook(){
+        new Book();
+        file_size = 0;
+        file_format = "-";
+    }
+
+    // Ввод данных для электронной книги
+    public void input(int author_id) {
+        Scanner scanner = new Scanner(System.in);
+        super.input(author_id);
+        System.out.print("Введите формат файла (например, PDF, EPUB): ");
+        file_format = scanner.nextLine();
+        System.out.print("Введите размер файла (в МБ): ");
+        file_size = scanner.nextDouble();
+    }
+
+    //перегрузка функции вывода с методом базового класса и без
+    public void output() {
+        super.output(); // Вызов метода вывода из базового класса
+        System.out.println("  Формат файла - " + file_format);
+        System.out.println("  Размер файла - " + file_size +"МБ");
+    }
+
+    public void output(String str) {
+        System.out.println("[ Книга ]");
+        System.out.println("  Название - " + title);
+        System.out.println("  Формат файла - " + file_format);
+        System.out.println("  Размер файла - " + file_size);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Книга:\n");
+        sb.append("  Название - ").append(title).append("\n");
+        sb.append("  Год публикации - ").append(publishedYear).append("\n");
+        sb.append("  ID книги - ").append(id).append("\n");
+        sb.append("  ID автора - ").append(authorId).append("\n");
+        sb.append("  Статус - ").append(isAvailable ? "Доступна" : "Не доступна");
+        sb.append("  Формат файла - ").append(file_format).append("\n");
+        sb.append("  Размер файла - ").append(file_size).append("\n");
+        return sb.toString();
+    }
+
+    @Override
+    public EBook clone() throws CloneNotSupportedException{
+        return (EBook) super.clone();
+    }
+};
+
+
+
+class Reader implements Cloneable, Identifiable{
     private int id;                 // id читателя
     private int borrowedBookId;     // id занятой книги
     private String name;            // имя
@@ -206,12 +364,33 @@ class Reader {
     }
 
     // выдача id читателя
+    @Override
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Читатель:\n");
+        sb.append("  Имя - ").append(name).append("\n");
+        sb.append("  Почта - ").append(email).append("\n");
+        sb.append("  ID читателя - ").append(id).append("\n");
+        sb.append("  ID занятой книги - ");
+        if (borrowedBookId == 0) {
+            sb.append("Книг не занято").append("\n");
+        } else {
+            sb.append(borrowedBookId).append("\n");
+        }
+        return sb.toString();
+    }
+    @Override
+    public Reader clone() throws CloneNotSupportedException{
+        return (Reader) super.clone();
+    }
 }
 
-class Order {
+class Order implements Cloneable, Identifiable {
     private int id;             // id запроса
     private int readerId;       // id читателя
     private int bookId;         // id запрашиваемой книги
@@ -258,13 +437,34 @@ class Order {
         System.out.println();
     }
 
+    //выдача id запроса
+    @Override
+    public int getId() {
+        return id;
+    }
     // добавление даты возврата
     public void edit(String returnDate) {
         this.returnDate = returnDate;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Запрос:\n");
+        sb.append("  ID запроса - ").append(id).append("\n");
+        sb.append("  ID читателя - ").append(readerId).append("\n");
+        sb.append("  ID книги - ").append(bookId).append("\n");
+        sb.append("  Дата запроса - ").append(orderDate).append("\n");
+        sb.append("  Дата возврата - ").append(returnDate).append("\n");
+        return sb.toString();
+    }
+    @Override
+    public Order clone() throws CloneNotSupportedException{
+        return (Order) super.clone();
+    }
 }
 
-class Fine {
+class Fine implements Cloneable, Identifiable {
     private int id;             // id штрафа
     private int readerId;       // id читателя
     private int amount;         // размер штрафа
@@ -313,9 +513,30 @@ class Fine {
         System.out.println();
     }
 
+    //выдача id штрафа
+    @Override
+    public int getId() {
+        return id;
+    }
+
     // присвоение статуса "оплачен"
     public void edit() {
         isPaid = true;
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Штраф:\n");
+        sb.append("  ID штрафа - ").append(id).append("\n");
+        sb.append("  ID читателя - ").append(readerId).append("\n");
+        sb.append("  Объем штрафа - ").append(amount).append("\n");
+        sb.append("  Статус - ").append(isPaid ? "Оплачен" : "Не оплачен").append("\n");
+        sb.append("  Причина - ").append(reason).append("\n");
+        return sb.toString();
+    }
+    @Override
+    public Fine clone() throws CloneNotSupportedException{
+        return (Fine) super.clone();
     }
 }
 
