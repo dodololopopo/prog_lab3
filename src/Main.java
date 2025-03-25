@@ -544,7 +544,7 @@ class Fine implements Cloneable, Identifiable {
 
 
 public class Main{
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
         int howManyBooks;
         Scanner scanner = new Scanner(System.in);
         Author lary = new Author();
@@ -555,9 +555,36 @@ public class Main{
             System.out.println("We tried, we're sorry");
             System.exit(1);
         }
-        lary.output();
+        System.out.println(lary);
         lary.increment();
         Author.show_amount_of_authors();
+
+        //демонстрация с производным классом
+        EBook Eb = new EBook();
+        Eb.input(lary.getId());
+        Eb.update_lib();
+        lary.addBook(Eb.getId());
+        Eb.output();
+        Eb.output("shorter");
+
+        //демонстрация клонирования
+        EBook clonedEb = Eb.clone();
+        clonedEb.setAvailability(false);
+        System.out.println("Протитип:");
+        System.out.println(Eb);
+        System.out.println("Клон");
+        System.out.println(clonedEb);
+
+        //глубокое клонирование
+        Collection<EBook> collectEbooks = new Collection<EBook>();
+        collectEbooks.add(Eb);
+        collectEbooks.add(clonedEb);
+        Collection<EBook> clonedcollectEbooks = collectEbooks.clone();
+        clonedcollectEbooks.items.get(0).input(lary.getId());
+        System.out.println("При глубоком клонировании клонированные объекты не ссылаются на один и тот же объект:");
+        collectEbooks.output();
+        clonedcollectEbooks.output();
+
 
         System.out.print("Сколько добавить книг?: ");
         howManyBooks = scanner.nextInt();
@@ -580,7 +607,7 @@ public class Main{
 
         // Вывод данных всех книг
         for (Book book : gary) {
-            book.output();
+            System.out.println(book);
         }
         lary.output();
 
@@ -596,7 +623,7 @@ public class Main{
             System.out.println("We tried, we're sorry");
             System.exit(1);
         }
-        lary2.output();
+        System.out.println(lary2);
         lary2.increment();
         Author.show_amount_of_authors();
 
@@ -624,9 +651,9 @@ public class Main{
         }
 
         for (int i=0; i<2; i++){
-            reader[i].output();
+            System.out.println(reader[i]);
             for (int j=0; j<2; j++){
-                fine[i][j].output();
+                System.out.println(fine[i][j]);
             }
         }
 
@@ -638,16 +665,16 @@ public class Main{
             System.out.println("We tried, we're sorry");
             System.exit(1);
         }
-        pery.output();
+        System.out.println(pery);
 
         // Пример редактирования заказа
         pery.edit("21.11.2121");
-        pery.output();
+        System.out.println(pery);
 
 
 
         // Пример редактирования штрафа
         fine[0][0].edit();
-        fine[0][0].output();
+        System.out.println(fine[0][0]);
     }
 }
