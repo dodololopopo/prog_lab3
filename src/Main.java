@@ -1,6 +1,8 @@
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
+import java.util.Collections;
 import java.util.Scanner;
 
 class Collection<T extends Cloneable> implements Cloneable{
@@ -45,6 +47,27 @@ class Collection<T extends Cloneable> implements Cloneable{
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("Clone not supported for item: " + item, e);
         }
+    }
+
+    public void sortByYear() {
+        Collections.sort(items, new Comparator<T>() {
+            @Override
+            public int compare(T o1, T o2) {
+                if (o1 instanceof Book && o2 instanceof Book) {
+                    return ((Book) o1).getPublishedYear().compareTo(((Book) o2).getPublishedYear());
+                }
+                return 0;
+            }
+        });
+    }
+
+    public T findByTitle(String title) {
+        for (T item : items) {
+            if (item instanceof Book && ((Book) item).getTitle().equalsIgnoreCase(title)) {
+                return item;
+            }
+        }
+        return null; // Если книга не найдена
     }
 }
 
@@ -254,6 +277,14 @@ class Book extends Literature implements Cloneable, Identifiable{
     @Override
     public Book clone() throws CloneNotSupportedException{
         return (Book) super.clone();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPublishedYear() {
+        return publishedYear;
     }
 }
 
@@ -558,6 +589,30 @@ public class Main{
         System.out.println(lary);
         lary.increment();
         Author.show_amount_of_authors();
+
+
+        //демонстрация сортировки и поиска
+        Book a = new Book();
+        Book b = new Book();
+        EBook c = new EBook();
+        a.input(lary.getId());
+        b.input(lary.getId());
+        c.input(lary.getId());
+        Collection<Book> LiSorFi = new Collection<Book>();
+        LiSorFi.add(a);
+        LiSorFi.add(b);
+        LiSorFi.add(c);
+
+        LiSorFi.output();
+        System.out.println("Сортируем по году публикации:");
+        LiSorFi.sortByYear();
+        LiSorFi.output();
+
+        System.out.println("Поиск");
+        System.out.print("Введите название: ");
+        String searchtitle = scanner.nextLine();
+        LiSorFi.findByTitle(searchtitle).output();
+
 
         //демонстрация с производным классом
         EBook Eb = new EBook();
